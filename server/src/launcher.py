@@ -102,20 +102,18 @@ def install_mods(config):
     except Exception as e:
         print(f"[ОШИБКА] Не удалось скопировать скрипты: {e}")
 
-    # 2. Установка JContainers (Скачиваем последнюю версию с Github)
-    jcont_url = "https://github.com/ryobg/JContainers/releases/download/v4.2.9/JContainers.SE.v4.2.9.zip"
-    # Архив JContainers уже содержит папку Data, поэтому распаковываем в корень игры
+    # 2. Установка JContainers
+    jcont_url = "https://github.com/FrUsTaY/public-releases/releases/download/mod-file-to-skyrim/JContainers64-v4.2.13.1.zip"
+    # Архив JContainers уже содержит нужные файлы в корне, распаковываем в корень игры
     download_and_extract(jcont_url, game_path, "JContainers SE")
 
     # 3. Установка SKSE
     # Для версии 1.6.1170 нам нужен SKSE64 2.2.6
-    skse_url = "https://skse.silverlock.org/beta/skse64_2_02_06.7z"
-    print("\n[ИНФО] Для SKSE требуется ручная установка из-за формата .7z, который сложно распаковать встроенными средствами Python.")
-    print(f"Пожалуйста, скачайте архив: {skse_url}")
-    print("И распакуйте содержимое папки 'skse64_2_02_06' прямо в корень игры:")
-    print(game_path)
+    skse_url = "https://github.com/FrUsTaY/public-releases/releases/download/mod-file-to-skyrim/skse64_2_02_06.zip"
+    # Архив SKSE содержит файлы в корне, распаковываем в корень игры
+    download_and_extract(skse_url, game_path, "SKSE64")
 
-    input("\nНажмите Enter, когда прочитаете...")
+    input("\nНажмите Enter для возврата...")
 
 def check_lm_studio():
     clear_console()
