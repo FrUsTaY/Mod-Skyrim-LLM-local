@@ -161,6 +161,9 @@ def check_creation_kit(config):
         print("2. Включите отображение 'Инструментов' (Tools) в фильтре поиска.")
         print("3. Найдите и установите 'Skyrim Special Edition: Creation Kit'.")
         print("4. Убедитесь, что он устанавливается в ту же папку, где находится SkyrimSE.exe.")
+        print("\n[!] ДЛЯ ИГРОКОВ С ПИРАТСКОЙ ВЕРСИЕЙ ИГРЫ:")
+        print("Steam скачает Creation Kit в свою папку (обычно это C:\\Program Files (x86)\\Steam\\steamapps\\common\\Skyrim Special Edition).")
+        print("Вам нужно зайти в эту папку Steam, скопировать оттуда абсолютно все файлы и вставить их в реальную папку с вашей игрой.")
 
     input("\nНажмите Enter для возврата...")
 
