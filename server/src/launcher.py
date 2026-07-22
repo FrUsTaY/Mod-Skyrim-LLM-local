@@ -115,6 +115,31 @@ def install_mods(config):
 
     input("\nНажмите Enter для возврата...")
 
+def check_dependencies(config):
+    clear_console()
+    print("=== Проверка установленных зависимостей ===")
+
+    game_path = config.get("skyrim_path", "")
+    if not game_path or not os.path.exists(game_path):
+        print("[ОШИБКА] Сначала укажите правильный путь к игре (Пункт 1).")
+        input("\nНажмите Enter для возврата...")
+        return
+
+    skse_path = os.path.join(game_path, "skse64_loader.exe")
+    jcont_path = os.path.join(game_path, "Data", "SKSE", "Plugins", "JContainers64.dll")
+
+    if os.path.exists(skse_path):
+        print("[УСПЕХ] SKSE найден!")
+    else:
+        print("[ОШИБКА] SKSE не найден! (skse64_loader.exe отсутствует)")
+
+    if os.path.exists(jcont_path):
+        print("[УСПЕХ] JContainers найден!")
+    else:
+        print("[ОШИБКА] JContainers не найден! (JContainers64.dll отсутствует)")
+
+    input("\nНажмите Enter для возврата...")
+
 def check_lm_studio():
     clear_console()
     print("=== Проверка LM Studio ===")
@@ -176,8 +201,9 @@ def main_menu():
 
         print("1. Указать путь к папке с игрой Skyrim")
         print("2. Установить зависимости мода в игру (SKSE, JContainers)")
-        print("3. Проверить статус нейросети (LM Studio)")
-        print("4. ЗАПУСТИТЬ СЕРВЕР (Голос и Чат)")
+        print("3. Проверить установленные зависимости в игре")
+        print("4. Проверить статус нейросети (LM Studio)")
+        print("5. ЗАПУСТИТЬ СЕРВЕР (Голос и Чат)")
         print("0. Выход")
         print("-" * 50)
 
@@ -188,8 +214,10 @@ def main_menu():
         elif choice == '2':
             install_mods(config)
         elif choice == '3':
-            check_lm_studio()
+            check_dependencies(config)
         elif choice == '4':
+            check_lm_studio()
+        elif choice == '5':
             start_server(config)
         elif choice == '0':
             print("До свидания!")
