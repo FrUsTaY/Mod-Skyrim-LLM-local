@@ -140,6 +140,33 @@ def check_dependencies(config):
 
     input("\nНажмите Enter для возврата...")
 
+def check_creation_kit(config):
+    clear_console()
+    print("=== Проверка установленного Creation Kit ===")
+
+    game_path = config.get("skyrim_path", "")
+    if not game_path or not os.path.exists(game_path):
+        print("[ОШИБКА] Сначала укажите правильный путь к игре (Пункт 1).")
+        input("\nНажмите Enter для возврата...")
+        return
+
+    ck_path = os.path.join(game_path, "CreationKit.exe")
+
+    if os.path.exists(ck_path):
+        print("[УСПЕХ] Creation Kit найден!")
+    else:
+        print("[ОШИБКА] Creation Kit не найден в папке с игрой!")
+        print("\nЧто нужно сделать:")
+        print("1. Откройте Steam и перейдите в библиотеку.")
+        print("2. Включите отображение 'Инструментов' (Tools) в фильтре поиска.")
+        print("3. Найдите и установите 'Skyrim Special Edition: Creation Kit'.")
+        print("4. Убедитесь, что он устанавливается в ту же папку, где находится SkyrimSE.exe.")
+        print("\n[!] ДЛЯ ИГРОКОВ С ПИРАТСКОЙ ВЕРСИЕЙ ИГРЫ:")
+        print("Steam скачает Creation Kit в свою папку (обычно это C:\\Program Files (x86)\\Steam\\steamapps\\common\\Skyrim Special Edition).")
+        print("Вам нужно зайти в эту папку Steam, скопировать оттуда абсолютно все файлы и вставить их в реальную папку с вашей игрой.")
+
+    input("\nНажмите Enter для возврата...")
+
 def check_lm_studio():
     clear_console()
     print("=== Проверка LM Studio ===")
@@ -202,8 +229,9 @@ def main_menu():
         print("1. Указать путь к папке с игрой Skyrim")
         print("2. Установить зависимости мода в игру (SKSE, JContainers)")
         print("3. Проверить установленные зависимости в игре")
-        print("4. Проверить статус нейросети (LM Studio)")
-        print("5. ЗАПУСТИТЬ СЕРВЕР (Голос и Чат)")
+        print("4. Проверить установлен ли Creation Kit")
+        print("5. Проверить статус нейросети (LM Studio)")
+        print("6. ЗАПУСТИТЬ СЕРВЕР (Голос и Чат)")
         print("0. Выход")
         print("-" * 50)
 
@@ -216,8 +244,10 @@ def main_menu():
         elif choice == '3':
             check_dependencies(config)
         elif choice == '4':
-            check_lm_studio()
+            check_creation_kit(config)
         elif choice == '5':
+            check_lm_studio()
+        elif choice == '6':
             start_server(config)
         elif choice == '0':
             print("До свидания!")
