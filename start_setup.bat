@@ -26,9 +26,9 @@ cd /d "%~dp0server"
 
 :: Check and create virtual environment
 IF NOT EXIST "venv\Scripts\activate.bat" (
-    echo [INFO] Creating virtual environment (venv). This may take a moment...
+    echo [INFO] Creating virtual environment... This may take a moment.
     python -m venv venv
-    IF %ERRORLEVEL% NEQ 0 (
+    if errorlevel 1 (
         echo [ERROR] Failed to create virtual environment.
         pause
         exit /b

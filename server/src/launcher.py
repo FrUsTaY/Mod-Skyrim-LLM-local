@@ -104,7 +104,8 @@ def install_mods(config):
 
     # 2. Установка JContainers (Скачиваем последнюю версию с Github)
     jcont_url = "https://github.com/ryobg/JContainers/releases/download/v4.2.9/JContainers.SE.v4.2.9.zip"
-    download_and_extract(jcont_url, target_data, "JContainers SE")
+    # Архив JContainers уже содержит папку Data, поэтому распаковываем в корень игры
+    download_and_extract(jcont_url, game_path, "JContainers SE")
 
     # 3. Установка SKSE
     # Для версии 1.6.1170 нам нужен SKSE64 2.2.6
