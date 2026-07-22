@@ -113,6 +113,26 @@ def install_mods(config):
     # Архив SKSE содержит файлы в корне, распаковываем в корень игры
     download_and_extract(skse_url, game_path, "SKSE64")
 
+    # 4. Исправление путей исходников для Skyrim SE
+    # SKSE и JContainers распаковывают свои исходники в Data/Scripts/Source (старый формат LE).
+    # Для Skyrim SE Creation Kit нужно, чтобы они лежали в Data/Source/Scripts.
+    print("\nИсправление путей исходников для Creation Kit...")
+    old_source_dir = os.path.join(game_path, "Data", "Scripts", "Source")
+    new_source_dir = os.path.join(game_path, "Data", "Source", "Scripts")
+    if os.path.exists(old_source_dir):
+        os.makedirs(new_source_dir, exist_ok=True)
+        try:
+            for item in os.listdir(old_source_dir):
+                s = os.path.join(old_source_dir, item)
+                d = os.path.join(new_source_dir, item)
+                if os.path.isfile(s):
+                    shutil.copy2(s, d)
+                elif os.path.isdir(s):
+                    shutil.copytree(s, d, dirs_exist_ok=True)
+            print("[УСПЕХ] Исходники скриптов скопированы в Data/Source/Scripts.")
+        except Exception as e:
+            print(f"[ОШИБКА] Не удалось скопировать исходники: {e}")
+
     input("\nНажмите Enter для возврата...")
 
 def check_dependencies(config):
