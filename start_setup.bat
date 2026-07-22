@@ -1,5 +1,9 @@
 @echo off
 %SystemRoot%\System32\chcp.com 65001 >nul
+REM Костыль для Windows CMD: после смены кодировки на UTF-8 сбрасываем буфер чтения файла
+goto :START_SCRIPT
+
+:START_SCRIPT
 title Установка и запуск Skyrim LLM Voice Mod
 color 0A
 
@@ -22,7 +26,8 @@ IF %ERRORLEVEL% NEQ 0 (
 echo [OK] Python найден.
 echo.
 
-cd server
+:: Надежный переход в папку server относительно расположения самого .bat файла
+cd /d "%~dp0server"
 
 :: Проверка и создание виртуального окружения
 IF NOT EXIST "venv\Scripts\activate.bat" (
