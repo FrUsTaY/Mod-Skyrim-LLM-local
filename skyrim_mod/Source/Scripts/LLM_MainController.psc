@@ -1,7 +1,7 @@
 Scriptname LLM_MainController extends Quest
 
 ; Свойства для настройки в Creation Kit
-Key Property PushToTalkKey = 47 Auto ; Клавиша 'V' по умолчанию
+Int Property PushToTalkKey = 47 Auto ; Клавиша 'V' по умолчанию
 Actor Property PlayerRef Auto
 
 ; Пути для обмена данными.
