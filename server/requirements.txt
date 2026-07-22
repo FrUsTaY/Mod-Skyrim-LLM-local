@@ -1,0 +1,9 @@
+faster-whisper
+sounddevice
+numpy
+scipy
+requests
+openai
+torchaudio
+torch
+pygame
