@@ -10,20 +10,34 @@ from tts import TextToSpeech
 # Настройка путей (предполагается, что сервер запускается параллельно с игрой,
 # и пути настроены на папку игры. Для разработки используем локальные заглушки).
 
-# Для production нужно будет просить пользователя указать путь к папке Skyrim в config.json
-MOD_INTERFACE_DIR = os.path.join("..", "skyrim_mod", "Interface", "llm_bridge")
-MOD_SOUND_DIR = os.path.join("..", "skyrim_mod", "Sound", "Voice", "llm_mod")
-
-os.makedirs(MOD_INTERFACE_DIR, exist_ok=True)
-os.makedirs(MOD_SOUND_DIR, exist_ok=True)
-
-FLAG_START = os.path.join(MOD_INTERFACE_DIR, "recording_start.flag")
-FLAG_STOP = os.path.join(MOD_INTERFACE_DIR, "recording_stop.flag")
-REQUEST_JSON = os.path.join(MOD_INTERFACE_DIR, "request.json")
-RESPONSE_JSON = os.path.join(MOD_INTERFACE_DIR, "response.json")
-TEMP_AUDIO = "temp_recording.wav"
+def load_config():
+    config_path = "config.json"
+    if os.path.exists(config_path):
+        with open(config_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {}
 
 def main():
+    config = load_config()
+    skyrim_path = config.get("skyrim_path")
+
+    if not skyrim_path or not os.path.exists(skyrim_path):
+        print("[ОШИБКА] Неверный путь к Skyrim в config.json. Пожалуйста, настройте его через launcher.py.")
+        return
+
+    # Динамические пути на основе пути пользователя
+    MOD_INTERFACE_DIR = os.path.join(skyrim_path, "Data", "Interface", "llm_bridge")
+    MOD_SOUND_DIR = os.path.join(skyrim_path, "Data", "Sound", "Voice", "llm_mod")
+
+    os.makedirs(MOD_INTERFACE_DIR, exist_ok=True)
+    os.makedirs(MOD_SOUND_DIR, exist_ok=True)
+
+    FLAG_START = os.path.join(MOD_INTERFACE_DIR, "recording_start.flag")
+    FLAG_STOP = os.path.join(MOD_INTERFACE_DIR, "recording_stop.flag")
+    REQUEST_JSON = os.path.join(MOD_INTERFACE_DIR, "request.json")
+    RESPONSE_JSON = os.path.join(MOD_INTERFACE_DIR, "response.json")
+    TEMP_AUDIO = "temp_recording.wav"
+
     print("Инициализация компонентов сервера...")
     recorder = AudioRecorder(output_path=TEMP_AUDIO)
     stt = SpeechToText(download_root="../models")
@@ -58,11 +72,11 @@ def main():
             recorder.stop_recording()
 
             # Начинаем обработку
-            process_interaction(stt, llm, tts)
+            process_interaction(stt, llm, tts, REQUEST_JSON, RESPONSE_JSON, MOD_SOUND_DIR, TEMP_AUDIO)
 
         time.sleep(0.1) # Polling interval
 
-def process_interaction(stt, llm, tts):
+def process_interaction(stt, llm, tts, REQUEST_JSON, RESPONSE_JSON, MOD_SOUND_DIR, TEMP_AUDIO):
     print("--- Начало обработки взаимодействия ---", flush=True)
 
     # Чтение контекста из игры
