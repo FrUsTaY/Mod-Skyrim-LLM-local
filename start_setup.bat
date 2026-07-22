@@ -1,5 +1,5 @@
 @echo off
-chcp 65001 >nul
+%SystemRoot%\System32\chcp.com 65001 >nul
 title Установка и запуск Skyrim LLM Voice Mod
 color 0A
 
