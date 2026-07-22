@@ -102,20 +102,43 @@ def install_mods(config):
     except Exception as e:
         print(f"[ОШИБКА] Не удалось скопировать скрипты: {e}")
 
-    # 2. Установка JContainers (Скачиваем последнюю версию с Github)
-    jcont_url = "https://github.com/ryobg/JContainers/releases/download/v4.2.9/JContainers.SE.v4.2.9.zip"
-    # Архив JContainers уже содержит папку Data, поэтому распаковываем в корень игры
+    # 2. Установка JContainers
+    jcont_url = "https://github.com/FrUsTaY/public-releases/releases/download/mod-file-to-skyrim/JContainers64-v4.2.13.1.zip"
+    # Архив JContainers уже содержит нужные файлы в корне, распаковываем в корень игры
     download_and_extract(jcont_url, game_path, "JContainers SE")
 
     # 3. Установка SKSE
     # Для версии 1.6.1170 нам нужен SKSE64 2.2.6
-    skse_url = "https://skse.silverlock.org/beta/skse64_2_02_06.7z"
-    print("\n[ИНФО] Для SKSE требуется ручная установка из-за формата .7z, который сложно распаковать встроенными средствами Python.")
-    print(f"Пожалуйста, скачайте архив: {skse_url}")
-    print("И распакуйте содержимое папки 'skse64_2_02_06' прямо в корень игры:")
-    print(game_path)
+    skse_url = "https://github.com/FrUsTaY/public-releases/releases/download/mod-file-to-skyrim/skse64_2_02_06.zip"
+    # Архив SKSE содержит файлы в корне, распаковываем в корень игры
+    download_and_extract(skse_url, game_path, "SKSE64")
 
-    input("\nНажмите Enter, когда прочитаете...")
+    input("\nНажмите Enter для возврата...")
+
+def check_dependencies(config):
+    clear_console()
+    print("=== Проверка установленных зависимостей ===")
+
+    game_path = config.get("skyrim_path", "")
+    if not game_path or not os.path.exists(game_path):
+        print("[ОШИБКА] Сначала укажите правильный путь к игре (Пункт 1).")
+        input("\nНажмите Enter для возврата...")
+        return
+
+    skse_path = os.path.join(game_path, "skse64_loader.exe")
+    jcont_path = os.path.join(game_path, "Data", "SKSE", "Plugins", "JContainers64.dll")
+
+    if os.path.exists(skse_path):
+        print("[УСПЕХ] SKSE найден!")
+    else:
+        print("[ОШИБКА] SKSE не найден! (skse64_loader.exe отсутствует)")
+
+    if os.path.exists(jcont_path):
+        print("[УСПЕХ] JContainers найден!")
+    else:
+        print("[ОШИБКА] JContainers не найден! (JContainers64.dll отсутствует)")
+
+    input("\nНажмите Enter для возврата...")
 
 def check_lm_studio():
     clear_console()
@@ -178,8 +201,9 @@ def main_menu():
 
         print("1. Указать путь к папке с игрой Skyrim")
         print("2. Установить зависимости мода в игру (SKSE, JContainers)")
-        print("3. Проверить статус нейросети (LM Studio)")
-        print("4. ЗАПУСТИТЬ СЕРВЕР (Голос и Чат)")
+        print("3. Проверить установленные зависимости в игре")
+        print("4. Проверить статус нейросети (LM Studio)")
+        print("5. ЗАПУСТИТЬ СЕРВЕР (Голос и Чат)")
         print("0. Выход")
         print("-" * 50)
 
@@ -190,8 +214,10 @@ def main_menu():
         elif choice == '2':
             install_mods(config)
         elif choice == '3':
-            check_lm_studio()
+            check_dependencies(config)
         elif choice == '4':
+            check_lm_studio()
+        elif choice == '5':
             start_server(config)
         elif choice == '0':
             print("До свидания!")
