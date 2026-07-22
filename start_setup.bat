@@ -1,64 +1,59 @@
 @echo off
-%SystemRoot%\System32\chcp.com 65001 >nul
-REM Костыль для Windows CMD: после смены кодировки на UTF-8 сбрасываем буфер чтения файла
-goto :START_SCRIPT
-
-:START_SCRIPT
-title Установка и запуск Skyrim LLM Voice Mod
+title Skyrim LLM Voice Mod Installer
 color 0A
 
 echo ===================================================
-echo   Привет! Добро пожаловать в установщик мода
-echo   Skyrim Local LLM Voice.
+echo   Hello! Welcome to the installer for
+echo   Skyrim Local LLM Voice mod.
 echo ===================================================
 echo.
 
-:: Проверка наличия Python
+:: Check for Python
 python --version >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
-    echo [ОШИБКА] Python не найден в системе.
-    echo Пожалуйста, скачайте и установите Python 3.10 или 3.11 с сайта python.org
-    echo При установке обязательно поставьте галочку "Add Python to PATH"!
+    echo [ERROR] Python was not found on your system.
+    echo Please download and install Python 3.10 or 3.11 from python.org
+    echo Make sure to check the box "Add Python to PATH" during installation!
     pause
     exit /b
 )
 
-echo [OK] Python найден.
+echo [OK] Python found.
 echo.
 
-:: Надежный переход в папку server относительно расположения самого .bat файла
+:: Navigate to the server folder reliably
 cd /d "%~dp0server"
 
-:: Проверка и создание виртуального окружения
+:: Check and create virtual environment
 IF NOT EXIST "venv\Scripts\activate.bat" (
-    echo [ИНФО] Создание виртуального окружения venv. Это займет пару минут...
+    echo [INFO] Creating virtual environment (venv). This may take a moment...
     python -m venv venv
     IF %ERRORLEVEL% NEQ 0 (
-        echo [ОШИБКА] Не удалось создать виртуальное окружение.
+        echo [ERROR] Failed to create virtual environment.
         pause
         exit /b
     )
-    echo [OK] Виртуальное окружение создано.
+    echo [OK] Virtual environment created successfully.
 ) ELSE (
-    echo [OK] Виртуальное окружение найдено.
+    echo [OK] Virtual environment found.
 )
 
 echo.
-echo [ИНФО] Активация окружения и проверка библиотек...
+echo [INFO] Activating environment and checking requirements...
 call venv\Scripts\activate.bat
 
-:: Обновление pip и установка зависимостей
+:: Update pip and install requirements
 python -m pip install --upgrade pip >nul 2>&1
-echo [ИНФО] Установка необходимых библиотек (может занять время при первом запуске)...
+echo [INFO] Installing required libraries (this may take a while on first run)...
 pip install -r requirements.txt
 
 echo.
 echo ===================================================
-echo   Всё готово! Запуск меню...
+echo   All set! Launching the control panel...
 echo ===================================================
 timeout /t 2 >nul
 
-:: Запуск консольного приложения
+:: Launch the python console app (which will be in Russian as requested)
 python src\launcher.py
 
 pause

@@ -4,12 +4,13 @@ Scriptname LLM_MainController extends Quest
 Key Property PushToTalkKey = 47 Auto ; Клавиша 'V' по умолчанию
 Actor Property PlayerRef Auto
 
-; Пути для обмена данными (Относительно папки Skyrim/Data)
-String Property REQUEST_PATH = "Interface/llm_bridge/request.json" Auto
-String Property RESPONSE_PATH = "Interface/llm_bridge/response.json" Auto
-String Property START_FLAG = "Interface/llm_bridge/recording_start.flag" Auto
-String Property STOP_FLAG = "Interface/llm_bridge/recording_stop.flag" Auto
-String Property AUDIO_PATH = "Sound/Voice/llm_mod/" Auto
+; Пути для обмена данными.
+; ВНИМАНИЕ: JContainers пишет пути относительно корня игры (где SkyrimSE.exe), поэтому жестко задаем Data/
+String Property REQUEST_PATH = "Data/Interface/llm_bridge/request.json" Auto
+String Property RESPONSE_PATH = "Data/Interface/llm_bridge/response.json" Auto
+String Property START_FLAG = "Data/Interface/llm_bridge/recording_start.flag" Auto
+String Property STOP_FLAG = "Data/Interface/llm_bridge/recording_stop.flag" Auto
+String Property AUDIO_PATH = "Data/Sound/Voice/llm_mod/" Auto
 
 bool bIsRecording = false
 bool bIsWaitingForResponse = false
