@@ -7,3 +7,4 @@ openai
 torchaudio
 torch
 pygame
+omegaconf
