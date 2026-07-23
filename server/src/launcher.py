@@ -98,9 +98,10 @@ def install_mods(config):
 
                 os.makedirs(os.path.dirname(dest_path), exist_ok=True)
                 shutil.copy2(src_path, dest_path)
-        print("[УСПЕХ] Файлы мода скопированы.")
+                print(f"  -> Скопирован: {rel_path}")
+        print("[УСПЕХ] Файлы мода успешно скопированы в Data.")
     except Exception as e:
-        print(f"[ОШИБКА] Не удалось скопировать скрипты: {e}")
+        print(f"[ОШИБКА] Не удалось скопировать файлы: {e}")
 
     # 2. Установка JContainers
     jcont_url = "https://github.com/FrUsTaY/public-releases/releases/download/mod-file-to-skyrim/JContainers64-v4.2.13.1.zip"
@@ -112,6 +113,26 @@ def install_mods(config):
     skse_url = "https://github.com/FrUsTaY/public-releases/releases/download/mod-file-to-skyrim/skse64_2_02_06.zip"
     # Архив SKSE содержит файлы в корне, распаковываем в корень игры
     download_and_extract(skse_url, game_path, "SKSE64")
+
+    # 4. Исправление путей исходников для Skyrim SE
+    # SKSE и JContainers распаковывают свои исходники в Data/Scripts/Source (старый формат LE).
+    # Для Skyrim SE нужно, чтобы они лежали в Data/Source/Scripts.
+    print("\nИсправление путей исходников для Skyrim Special Edition...")
+    old_source_dir = os.path.join(game_path, "Data", "Scripts", "Source")
+    new_source_dir = os.path.join(game_path, "Data", "Source", "Scripts")
+    if os.path.exists(old_source_dir):
+        os.makedirs(new_source_dir, exist_ok=True)
+        try:
+            for item in os.listdir(old_source_dir):
+                s = os.path.join(old_source_dir, item)
+                d = os.path.join(new_source_dir, item)
+                if os.path.isfile(s):
+                    shutil.copy2(s, d)
+                elif os.path.isdir(s):
+                    shutil.copytree(s, d, dirs_exist_ok=True)
+            print("[УСПЕХ] Исходники скриптов скопированы в Data/Source/Scripts.")
+        except Exception as e:
+            print(f"[ОШИБКА] Не удалось скопировать исходники: {e}")
 
     input("\nНажмите Enter для возврата...")
 
